@@ -1,14 +1,13 @@
-// Inicialización de Three.js
-let scene, camera, renderer;
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.module.js';
+import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/jsm/controls/OrbitControls.js';
 
+let scene, camera, renderer, controls;
 let celestialObjects = [];
-let planetMeshes = [];
-let planetOrbitAngles = [];
 
 // Función para cargar el JSON
 async function loadData() {
     try {
-        const response = await fetch('../src/data/b67r-rgxc.json');  // Ruta al archivo JSON
+        const response = await fetch('./data/b67r-rgxc.json');  // Ruta al archivo JSON
         const data = await response.json();
         processData(data);
     } catch (error) {
@@ -85,28 +84,32 @@ function init() {
     scene = new THREE.Scene();
 
     // Crear la cámara
-    camera = new THREE.PerspectiveCamera(
-        75, 
-        window.innerWidth / window.innerHeight, 
-        0.1, 
-        1000
-    );
+    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.set(0, 100, 300);  // Elevar y alejar la cámara
     camera.lookAt(0, 0, 0);
 
     // Crear el renderizador
-    renderer = new THREE.WebGLRenderer();
+    renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.getElementById('scene-container').appendChild(renderer.domElement);
     
+    // Instanciar OrbitControls
+    controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true; // Suavizado
+    controls.dampingFactor = 0.25;  // Factor de suavizado
+    controls.enableZoom = true; // Habilitar el zoom
+    controls.minDistance = 50; // Distancia mínima al zoom
+    controls.maxDistance = 500; // Distancia máxima al zoom
+
     // Cargar los datos desde el archivo JSON
     loadData();
 
     // Crear el Sol
     createSun();
     
-    // Añadir luz solar (opcional)
+    // Añadir luz solar y ambiental
     addSunLight();
+    addAmbientLight();
     
     // Empezar la animación
     animate();
@@ -124,7 +127,7 @@ function animate() {
         const q_au_2 = parseFloat(orbit.q_au_2);
 
         const distance = (q_au_1 + q_au_2) / 2 * 100;  // Media entre perihelio y afelio, escalada
-        const time = Date.now() * 2.1;  // Tiempo ajustado para la simulación
+        const time = Date.now() * 0.002;  // Tiempo ajustado para la simulación
 
         // Actualizar la posición del objeto
         mesh.position.x = distance * Math.cos(time / period);
@@ -132,10 +135,14 @@ function animate() {
         mesh.rotation.y += 0.01;  // Rotación del objeto sobre su eje
     });
 
+    // Actualizar los controles
+    controls.update(); // Actualizar controles
+
     // Renderizar la escena
     renderer.render(scene, camera);
 }
 
+// Crear las órbitas
 function createOrbit(radius) {
     const orbitPoints = new THREE.BufferGeometry(); 
     const segments = 64; // Número de segmentos para crear el círculo
@@ -161,6 +168,7 @@ function createOrbit(radius) {
     return orbitLine;
 }
 
+// Crear el Sol
 function createSun() {
     const sunGeometry = new THREE.SphereGeometry(8, 32, 32); // Tamaño del Sol
 
@@ -182,6 +190,7 @@ function createSun() {
     scene.add(sunMesh);
 }
 
+// Añadir luz solar
 function addSunLight() {
     const sunLight = new THREE.PointLight(0xffffff, 1.5, 300); // Luz blanca brillante
     sunLight.position.set(0, 0, 0); // En el centro, donde está el Sol
@@ -190,12 +199,21 @@ function addSunLight() {
     scene.add(sunLight);
 }
 
+// Añadir luz ambiental
+function addAmbientLight() {
+    const ambientLight = new THREE.AmbientLight(0x404040); // Luz ambiental
+    scene.add(ambientLight);
+}
+
 // Ajustar el tamaño al cambiar la ventana
 window.addEventListener('resize', () => {
     renderer.setSize(window.innerWidth, window.innerHeight);
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
 });
+
+// Exportar la función init para ser llamada desde index.html
+export default init;
 
 // Inicializar la escena
 init();
