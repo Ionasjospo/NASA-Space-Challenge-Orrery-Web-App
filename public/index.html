@@ -102,9 +102,9 @@
                     scene = new THREE.Scene();
         
                     // Crear la cámara
-                    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+                    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1,9000); // COMENTARIO DE FRANCO: El 9000 sirve para definir el límite de la camara, si lo reducimos, se corta la imagen. 
                     camera.position.set(0, 100, 300);  // Elevar y alejar la cámara
-                    camera.lookAt(0, 0, 0);
+                    //camera.lookAt(0, 0, 0);
         
                     // Crear el renderizador
                     renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -116,8 +116,7 @@
                     controls.enableDamping = true; // Suavizado
                     controls.dampingFactor = 0.25;  // Factor de suavizado
                     controls.enableZoom = true; // Habilitar el zoom
-                    controls.minDistance = 50; // Distancia mínima al zoom
-                    controls.maxDistance = 500; // Distancia máxima al zoom
+                    
         
                     // Cargar los datos desde el archivo JSON
                     loadData();
