@@ -5,34 +5,55 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Orrery Web App con Babylon.js</title>
-    <style>
-        body {
-            margin: 0;
-        }
-
-        html,
-        body,
-        #renderCanvas {
-            width: 100%;
-            height: 100%;
-            touch-action: none;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
     <!-- Incluimos Babylon.js desde el CDN -->
     <script src="https://cdn.babylonjs.com/babylon.js"></script>
     <!-- Biblioteca para manejar eventos de puntero -->
     <script src="https://code.jquery.com/pep/0.4.3/pep.js"></script>
     <!-- Incluimos la GUI de Babylon.js para etiquetas -->
     <script src="https://cdn.babylonjs.com/gui/babylon.gui.min.js"></script>
-    <!-- Biblioteca para manejar eventos de puntero en navegadores que no los soportan -->
-<script src="https://code.jquery.com/pep/0.4.3/pep.js"></script>
-
 </head>
 
 <body>
+    <label class="switch">
+        <input type="checkbox" id="toggleScript"> 
+        <span class="slider"></span>
+    </label>
+
+    <div class="view-text" id="viewText">Current View: NEO</div>
+
     <canvas id="renderCanvas"></canvas>
-    <!-- <script src="app.js"></script> -->
-    <script src="./appNEO.js"></script>
+
+    <script>
+        const selectedApp = localStorage.getItem('selectedApp') || 'appNEO';
+
+        const viewText = document.getElementById('viewText');
+        viewText.textContent = selectedApp === 'app' ? 'Current View: Comets' : 'Current View: NEO';
+
+        function loadScript(scriptUrl) {
+            const scriptTag = document.createElement('script');
+            scriptTag.src = scriptUrl;
+            document.body.appendChild(scriptTag);
+        }
+
+        if (selectedApp === 'app') {
+            loadScript('./app.js');
+            document.getElementById('toggleScript').checked = true;
+        } else {
+            loadScript('./appNEO.js');
+        }
+
+        // Toggle between app.js and appNEO.js on checkbox change
+        document.getElementById('toggleScript').addEventListener('change', function (event) {
+            if (event.target.checked) {
+                localStorage.setItem('selectedApp', 'app');
+                location.reload();  
+            } else {
+                localStorage.setItem('selectedApp', 'appNEO');
+                location.reload();  
+            }
+        });
+    </script>
 </body>
 
 </html>
