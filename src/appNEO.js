@@ -101,11 +101,49 @@ function init() {
     scene = new BABYLON.Scene(engine);
 
     // Crear la cámara
-    camera = new BABYLON.ArcRotateCamera("camera", BABYLON.Tools.ToRadians(45), BABYLON.Tools.ToRadians(45), 500, new BABYLON.Vector3(0, 0, 0), scene);
-    camera.attachControl(canvas, true);
-    camera.lowerRadiusLimit = 50;
-    camera.upperRadiusLimit = 1000;
+    camera = new BABYLON.ArcRotateCamera(
+        "camera",
+        BABYLON.Tools.ToRadians(45), // alpha
+        BABYLON.Tools.ToRadians(45), // beta
+        500,                         // radio
+        new BABYLON.Vector3(0, 0, 0), // Objetivo inicial
+        scene
+    );
 
+    camera.attachControl(canvas, true);
+
+    // Configurar los límites del zoom
+    camera.lowerRadiusLimit = 10;
+    camera.upperRadiusLimit = 5000;
+
+    camera.panningSensibility = 0; 
+
+    camera.zoomToMouseLocation = true;
+
+    camera.wheelPrecision = 50;
+    camera.pinchPrecision = 200;
+
+    // Evento para manejar el desplazamiento y el paneo
+    canvas.addEventListener('wheel', function (event) {
+        event.preventDefault();
+
+        if (event.ctrlKey) {
+            // Con Ctrl, hacemos zoom
+            const delta = event.deltaY;
+            const zoomFactor = delta * 0.2;
+            camera.radius += zoomFactor;
+        } else {
+            // De lo contrario, paneamos la cámara
+            const deltaX = event.deltaX;
+            const deltaY = event.deltaY;
+
+            const panSpeed = 0.00007 * camera.radius; // Ajusta la sensibilidad del paneo
+
+            camera.inertialPanningX += -deltaX * panSpeed;
+            camera.inertialPanningY += -deltaY * panSpeed;
+        }
+    });
+    
     // Añadir luz solar y ambiental
     addSunLight();
     addAmbientLight();
