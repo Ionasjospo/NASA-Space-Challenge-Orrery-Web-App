@@ -21,7 +21,7 @@ function processData(data) {
         const diameter = parseFloat(obj.diameter); // Diámetro
 
         // Aumentar el tamaño del objeto para que sea más visible
-        const size = diameter;  // Usa el diámetro directamente
+        const size = diameter; // Usa el diámetro directamente
         const sphere = BABYLON.MeshBuilder.CreateSphere(`sphere${i}`, { diameter: size, segments: 32 }, scene);
         const material = new BABYLON.StandardMaterial(`material${i}`, scene);
         material.diffuseColor = new BABYLON.Color3(1, 1, 1); // Blanco
@@ -44,8 +44,9 @@ function processData(data) {
     });
 
     // Crear órbitas para los objetos después de procesar los datos
-    createOrbits(celestialObjects); // Cambiado a celestialObjects
+    createOrbits(data);
 }
+
 
 // Crear el label con el nombre
 function createLabel(text, x, y, z) {
@@ -62,12 +63,16 @@ function createLabel(text, x, y, z) {
     return plane;
 }
 
-function createOrbits(objects) {
-    objects.forEach(({ orbit }, index) => {
-        const a = parseFloat(orbit.a); // Semi-eje mayor
-        const e = parseFloat(orbit.e); // Excentricidad
-        const radius = a * 100; // Escalar el radio para las órbitas
-        const orbitLine = createOrbit(radius, index);
+// Función para crear órbitas
+function createOrbits(data) {
+    data.forEach((obj, index) => {
+        const a = parseFloat(obj.a); // Semi-eje mayor
+        const e = parseFloat(obj.e); // Excentricidad
+        const diameter = parseFloat(obj.diameter); // Diámetro del objeto
+
+        // Aumentar el radio de la órbita en función del tamaño del objeto
+        const orbitRadius = a * 100; // Escalar el radio para las órbitas y añadir un margen
+        const orbitLine = createOrbit(orbitRadius, index);
         scene.addMesh(orbitLine);
     });
 }
@@ -85,7 +90,7 @@ function createOrbit(radius, index) {
     }
 
     const orbit = BABYLON.MeshBuilder.CreateLines(`orbit${index}`, { points: points }, scene);
-    orbit.color = new BABYLON.Color3(1, 1, 1); // Blanco
+    orbit.color = new BABYLON.Color3(0.5, 0.5, 0.5); // gris
     return orbit;
 }
 
@@ -130,14 +135,19 @@ function animate() {
         // Obtener los parámetros orbitales
         const a = parseFloat(orbit.a); // Semi-eje mayor
         const e = parseFloat(orbit.e); // Excentricidad
-        const period = parseFloat(orbit.per_y) * 365;  // Convertir el periodo a días
+        const period = parseFloat(orbit.per_y) * 365; // Convertir el periodo a días
 
-        const perihelionDistance = (a * (1 - e)) * 100; // Escalar la distancia
-        const time = Date.now() * 1.001;  // Tiempo ajustado para la simulación
+        // Calcular perihelio y afelio
+        const perihelionDistance = (a * (1 - e)) * 100; // Perihelio escalado
+        const aphelionDistance = (a * (1 + e)) * 100; // Afelio escalado
+        const averageDistance = (perihelionDistance + aphelionDistance) / 2; // Distancia promedio
 
-        // Actualizar la posición del objeto
-        mesh.position.x = perihelionDistance * Math.cos(time / period);
-        mesh.position.z = perihelionDistance * Math.sin(time / period);
+        // Tiempo ajustado para la simulación
+        const time = Date.now() * 1.0001;  // Ajustar la velocidad de la simulación
+
+        // Actualizar la posición del objeto usando la distancia promedio
+        mesh.position.x = averageDistance * Math.cos(time / period);
+        mesh.position.z = averageDistance * Math.sin(time / period);
         mesh.rotation.y += 0.01;  // Rotación del objeto sobre su eje
     });
 }
