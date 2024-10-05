@@ -1,12 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Orrery Web App con Babylon.js</title>
     <style>
-        body { margin: 0; }
-        html, body, #renderCanvas { width: 100%; height: 100%; overflow: hidden; }
+        body {
+            margin: 0;
+        }
+
+        html,
+        body,
+        #renderCanvas {
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+        }
     </style>
     <!-- Incluimos Babylon.js desde el CDN -->
     <script src="https://cdn.babylonjs.com/babylon.js"></script>
@@ -14,7 +24,11 @@
     <script src="https://code.jquery.com/pep/0.4.3/pep.js"></script>
     <!-- Incluimos la GUI de Babylon.js para etiquetas -->
     <script src="https://cdn.babylonjs.com/gui/babylon.gui.min.js"></script>
+    <!-- Biblioteca para manejar eventos de puntero en navegadores que no los soportan -->
+<script src="https://code.jquery.com/pep/0.4.3/pep.js"></script>
+
 </head>
+
 <body>
     <canvas id="renderCanvas"></canvas>
 
@@ -22,5 +36,7 @@
 
      <!--<script src="app.js"></script>-->
     <script src="/src/appNEO.js"></script>
+    <!--<script src="app.js"></script>-->
 </body>
+
 </html>
