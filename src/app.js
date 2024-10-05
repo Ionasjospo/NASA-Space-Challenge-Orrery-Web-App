@@ -106,7 +106,7 @@ function init() {
         new BABYLON.Vector3(0, 0, 0),
         scene
     );
-    
+
 
     // Vincular la cámara al canvas para permitir el control del usuario
     camera.attachControl(canvas, true);
@@ -121,26 +121,27 @@ function init() {
     // Ajustar la sensibilidad del zoom en dispositivos táctiles
     camera.pinchPrecision = 50; // Valor más alto significa zoom más lento en táctil
 
+    // Evento para manejar el desplazamiento con dos dedos en el touchpad
     canvas.addEventListener('wheel', function (event) {
         // Prevenir el comportamiento predeterminado para evitar el desplazamiento de la página
         event.preventDefault();
-    
-        // Ajustar el radio de la cámara (distancia al centro) basado en el delta del evento
-        const delta = event.deltaY;
-    
-        // Puedes ajustar el factor de sensibilidad aquí
-        const zoomFactor = delta * 1.0;
-    
-        camera.radius += zoomFactor;
-    
-        // Asegurar que el radio permanezca dentro de los límites establecidos
-        if (camera.radius < camera.lowerRadiusLimit) {
-            camera.radius = camera.lowerRadiusLimit;
-        } else if (camera.radius > camera.upperRadiusLimit) {
-            camera.radius = camera.upperRadiusLimit;
+
+        if (event.ctrlKey) {
+            // Si se mantiene presionada la tecla Ctrl, hacemos zoom
+            const delta = event.deltaY;
+            const zoomFactor = delta * 0.9; // Ajusta este valor según tu preferencia
+            camera.radius += zoomFactor;
+        } else {
+            // De lo contrario, paneamos la cámara
+            const deltaX = event.deltaX;
+            const deltaY = event.deltaY;
+
+            camera.target.x += deltaX * 0.1; // Ajusta la sensibilidad aquí
+            camera.target.z += deltaY * 0.1; // Ajusta la sensibilidad aquí
         }
     });
-    
+
+
 
 
     // Añadir luz solar y ambiental
