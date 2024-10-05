@@ -88,29 +88,27 @@ function createOrbit(radius, index) {
     }
 
     const orbit = BABYLON.MeshBuilder.CreateLines(`orbit${index}`, { points: points }, scene);
-    orbit.color = new BABYLON.Color3(0.5, 0.5, 0.5); // Blanco
+    orbit.color = new BABYLON.Color3(0.5, 0.5, 0.5); 
     return orbit;
 }
 
-// Crear la escena
+
 function init() {
     canvas = document.getElementById("renderCanvas");
     engine = new BABYLON.Engine(canvas, true);
     scene = new BABYLON.Scene(engine);
 
-    // Crear la cámara
     camera = new BABYLON.ArcRotateCamera(
         "camera",
-        BABYLON.Tools.ToRadians(45), // alpha
-        BABYLON.Tools.ToRadians(45), // beta
-        500,                         // radio
-        new BABYLON.Vector3(0, 0, 0), // Objetivo inicial
+        BABYLON.Tools.ToRadians(45),
+        BABYLON.Tools.ToRadians(45),
+        500,                        
+        new BABYLON.Vector3(0, 0, 0), 
         scene
     );
 
     camera.attachControl(canvas, true);
 
-    // Configurar los límites del zoom
     camera.lowerRadiusLimit = 10;
     camera.upperRadiusLimit = 5000;
 
@@ -121,21 +119,18 @@ function init() {
     camera.wheelPrecision = 50;
     camera.pinchPrecision = 200;
 
-    // Evento para manejar el desplazamiento y el paneo
     canvas.addEventListener('wheel', function (event) {
         event.preventDefault();
 
         if (event.ctrlKey) {
-            // Con Ctrl, hacemos zoom
             const delta = event.deltaY;
             const zoomFactor = delta * 0.2;
             camera.radius += zoomFactor;
         } else {
-            // De lo contrario, paneamos la cámara
             const deltaX = event.deltaX;
             const deltaY = event.deltaY;
 
-            const panSpeed = 0.00007 * camera.radius; // Ajusta la sensibilidad del paneo
+            const panSpeed = 0.00007 * camera.radius;
 
             camera.inertialPanningX += -deltaX * panSpeed;
             camera.inertialPanningY += -deltaY * panSpeed;
@@ -144,71 +139,58 @@ function init() {
 
 
 
-    // Añadir luz solar y ambiental
     addSunLight();
     addAmbientLight();
 
-    // Crear el Sol
     createSun();
 
-    // Cargar los datos desde el archivo JSON
     loadData();
 
-    // Render loop
     engine.runRenderLoop(function () {
         animate();
         scene.render();
     });
 
-    // Ajustar el tamaño al cambiar la ventana
     window.addEventListener('resize', function () {
         engine.resize();
     });
 }
 
-// Función de animación
 function animate() {
-    // Actualización de la posición de los objetos en sus órbitas
     celestialObjects.forEach(({ mesh, orbit }) => {
-        // Convertir a valores numéricos
-        const period = parseFloat(orbit.p_yr) * 365;  // Convertir el periodo a días
+        const period = parseFloat(orbit.p_yr) * 365;  
         const q_au_1 = parseFloat(orbit.q_au_1);
         const q_au_2 = parseFloat(orbit.q_au_2);
 
-        // Calcular la distancia media entre perihelio y afelio
-        const distance = ((q_au_1 + q_au_2) / 2) * 100;  // Media entre perihelio y afelio, escalada
-        const time = Date.now() * 0.500;  // Tiempo ajustado para la simulación
+        const distance = ((q_au_1 + q_au_2) / 2) * 100;  
+        const time = Date.now() * 0.500; 
 
-        // Actualizar la posición del objeto manteniendo la altura fija
         mesh.position.x = distance * Math.cos(time / period);
         mesh.position.z = distance * Math.sin(time / period);
-        mesh.position.y = 5;  // Mantener una altura fija
+        mesh.position.y = 5;  
 
-        mesh.rotation.y += 0.01;  // Rotación del objeto sobre su eje
+        mesh.rotation.y += 0.01; 
     });
 }
 
-// Crear el Sol
 function createSun() {
     const sun = BABYLON.MeshBuilder.CreateSphere("sun", { diameter: 16, segments: 32 }, scene);
     const sunMaterial = new BABYLON.StandardMaterial("sunMaterial", scene);
-    sunMaterial.emissiveColor = new BABYLON.Color3(1, 0.8, 0); // Amarillo-naranja brillante
+    sunMaterial.emissiveColor = new BABYLON.Color3(1, 0.8, 0); 
     sun.material = sunMaterial;
     sun.position.set(0, 0, 0);
 }
 
-// Añadir luz solar
+
 function addSunLight() {
     const sunLight = new BABYLON.PointLight("sunLight", new BABYLON.Vector3(0, 0, 0), scene);
     sunLight.intensity = 1.5;
     sunLight.range = 1000;
 }
 
-// Añadir luz ambiental
 function addAmbientLight() {
     const ambientLight = new BABYLON.HemisphericLight("ambientLight", new BABYLON.Vector3(0, 1, 0), scene);
     ambientLight.intensity = 0.5;
 }
 
-// Inicializar la escena
 init();
