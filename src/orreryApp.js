@@ -16,7 +16,7 @@ export class OrreryApp {
 
     async loadData() {
         try {
-            const response = await fetch('../src/data/b67r-rgxc.json');  // Rute to json archive
+            const response = await fetch('../public/data/b67r-rgxc.json');  // Rute to json archive
             const data = await response.json();
             this.processData(data);
         } catch (error) {
