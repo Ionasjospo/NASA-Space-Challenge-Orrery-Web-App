@@ -180,7 +180,7 @@ function animate() {
         const orbitRadius = (a * 100) + (index * 50); // Asegurando que se mantenga el mismo radio
 
         // Tiempo ajustado para la simulación
-        const time = Date.now() * 2.0001;  // Ajustar la velocidad de la simulación
+        const time = Date.now() * 0.500;  // Ajustar la velocidad de la simulación
 
         // Actualizar la posición del objeto usando el orbitRadius
         mesh.position.x = orbitRadius * Math.cos(time / period); // Usar el orbitRadius aquí

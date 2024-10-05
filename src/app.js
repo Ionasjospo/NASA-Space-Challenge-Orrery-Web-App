@@ -16,14 +16,14 @@ async function loadData() {
 // Función para procesar el JSON y crear objetos 3D
 function processData(data) {
     let i = 0;
-    const yOffset = 5; // Altura fija sobre la órbita para los planetas
+    const yOffset = 0; // Altura fija sobre la órbita para los planetas
     data.forEach(obj => {
         // Convertir los valores de strings a números
         const q_au_1 = parseFloat(obj.q_au_1);
         const q_au_2 = parseFloat(obj.q_au_2);
 
         // Aumentar el tamaño del objeto para que sea más visible
-        const size = q_au_1 * 10;  // Aumentar el factor para que el objeto se vea más grande
+        const size = q_au_1 * 5;  // Aumentar el factor para que el objeto se vea más grande
         const sphere = BABYLON.MeshBuilder.CreateSphere(`sphere${i}`, { diameter: size * 2, segments: 32 }, scene);
         const material = new BABYLON.StandardMaterial(`material${i}`, scene);
         material.diffuseColor = new BABYLON.Color3(1, 1, 1); // Blanco
@@ -88,7 +88,7 @@ function createOrbit(radius, index) {
     }
 
     const orbit = BABYLON.MeshBuilder.CreateLines(`orbit${index}`, { points: points }, scene);
-    orbit.color = new BABYLON.Color3(1, 1, 1); // Blanco
+    orbit.color = new BABYLON.Color3(0.5, 0.5, 0.5); // Blanco
     return orbit;
 }
 
@@ -177,7 +177,7 @@ function animate() {
 
         // Calcular la distancia media entre perihelio y afelio
         const distance = ((q_au_1 + q_au_2) / 2) * 100;  // Media entre perihelio y afelio, escalada
-        const time = Date.now() * 0.001;  // Tiempo ajustado para la simulación
+        const time = Date.now() * 0.500;  // Tiempo ajustado para la simulación
 
         // Actualizar la posición del objeto manteniendo la altura fija
         mesh.position.x = distance * Math.cos(time / period);
