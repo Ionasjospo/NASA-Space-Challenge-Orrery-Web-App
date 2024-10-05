@@ -100,47 +100,46 @@ function init() {
     // Crear la cámara
     camera = new BABYLON.ArcRotateCamera(
         "camera",
-        BABYLON.Tools.ToRadians(45),
-        BABYLON.Tools.ToRadians(45),
-        500,
-        new BABYLON.Vector3(0, 0, 0),
+        BABYLON.Tools.ToRadians(45), // alpha
+        BABYLON.Tools.ToRadians(45), // beta
+        500,                         // radio
+        new BABYLON.Vector3(0, 0, 0), // Objetivo inicial
         scene
     );
 
-
-    // Vincular la cámara al canvas para permitir el control del usuario
     camera.attachControl(canvas, true);
 
-    // Habilitar la entrada de la rueda del ratón para el zoom
-    camera.inputs.addMouseWheel();
-
     // Configurar los límites del zoom
-    camera.lowerRadiusLimit = 50;    // Distancia mínima al centro (más cerca)
-    camera.upperRadiusLimit = 2500;  // Distancia máxima al centro (más lejos)
+    camera.lowerRadiusLimit = 10;
+    camera.upperRadiusLimit = 5000;
 
-    // Ajustar la sensibilidad del zoom en dispositivos táctiles
-    camera.pinchPrecision = 50; // Valor más alto significa zoom más lento en táctil
+    camera.panningSensibility = 0; 
 
-    // Evento para manejar el desplazamiento con dos dedos en el touchpad
+    camera.zoomToMouseLocation = true;
+
+    camera.wheelPrecision = 50;
+    camera.pinchPrecision = 200;
+
+    // Evento para manejar el desplazamiento y el paneo
     canvas.addEventListener('wheel', function (event) {
-        // Prevenir el comportamiento predeterminado para evitar el desplazamiento de la página
         event.preventDefault();
 
         if (event.ctrlKey) {
-            // Si se mantiene presionada la tecla Ctrl, hacemos zoom
+            // Con Ctrl, hacemos zoom
             const delta = event.deltaY;
-            const zoomFactor = delta * 0.9; // Ajusta este valor según tu preferencia
+            const zoomFactor = delta * 0.2;
             camera.radius += zoomFactor;
         } else {
             // De lo contrario, paneamos la cámara
             const deltaX = event.deltaX;
             const deltaY = event.deltaY;
 
-            camera.target.x += deltaX * 0.1; // Ajusta la sensibilidad aquí
-            camera.target.z += deltaY * 0.1; // Ajusta la sensibilidad aquí
+            const panSpeed = 0.00007 * camera.radius; // Ajusta la sensibilidad del paneo
+
+            camera.inertialPanningX += -deltaX * panSpeed;
+            camera.inertialPanningY += -deltaY * panSpeed;
         }
     });
-
 
 
 
