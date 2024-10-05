@@ -13,9 +13,10 @@ async function loadData() {
     }
 }
 
-// Procesar el JSON y crear objetos 3D
+// Función para procesar el JSON y crear objetos 3D
 function processData(data) {
     let i = 0;
+    const yOffset = 5; // Altura fija sobre la órbita para los planetas
     data.forEach(obj => {
         // Convertir los valores de strings a números
         const q_au_1 = parseFloat(obj.q_au_1);
@@ -30,14 +31,14 @@ function processData(data) {
 
         // Posición inicial del objeto (en el perihelio)
         const perihelionDistance = q_au_1 * 100;  // Escalar la distancia para hacer visible el objeto
-        sphere.position.set(perihelionDistance, 0, 0);
+        sphere.position.set(perihelionDistance, yOffset, 0); // Ajustar altura con yOffset
 
         // Guardar el objeto en un array para animarlo más tarde
         celestialObjects.push({ mesh: sphere, orbit: obj });
         scene.addMesh(sphere);
 
         // Crear y añadir el label con el nombre del objeto
-        const label = createLabel(obj.object_name, perihelionDistance, size + 10, 0);
+        const label = createLabel(obj.object_name, perihelionDistance, yOffset + 10, 0); // Ajusta la posición Y del label
         scene.addMesh(label);
 
         console.log(`Objeto ${i}:`, celestialObjects[i]);  // Depuración
@@ -174,12 +175,15 @@ function animate() {
         const q_au_1 = parseFloat(orbit.q_au_1);
         const q_au_2 = parseFloat(orbit.q_au_2);
 
-        const distance = (q_au_1 + q_au_2) / 2 * 100;  // Media entre perihelio y afelio, escalada
-        const time = Date.now() * 2;  // Tiempo ajustado para la simulación
+        // Calcular la distancia media entre perihelio y afelio
+        const distance = ((q_au_1 + q_au_2) / 2) * 100;  // Media entre perihelio y afelio, escalada
+        const time = Date.now() * 0.001;  // Tiempo ajustado para la simulación
 
-        // Actualizar la posición del objeto
+        // Actualizar la posición del objeto manteniendo la altura fija
         mesh.position.x = distance * Math.cos(time / period);
         mesh.position.z = distance * Math.sin(time / period);
+        mesh.position.y = 5;  // Mantener una altura fija
+
         mesh.rotation.y += 0.01;  // Rotación del objeto sobre su eje
     });
 }
