@@ -6,11 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Orrery Web App con Babylon.js</title>
     <link rel="stylesheet" href="styles.css">
-    <!-- Incluimos Babylon.js desde el CDN -->
     <script src="https://cdn.babylonjs.com/babylon.js"></script>
-    <!-- Biblioteca para manejar eventos de puntero -->
     <script src="https://code.jquery.com/pep/0.4.3/pep.js"></script>
-    <!-- Incluimos la GUI de Babylon.js para etiquetas -->
     <script src="https://cdn.babylonjs.com/gui/babylon.gui.min.js"></script>
 </head>
 
@@ -43,7 +40,6 @@
             loadScript('./appNEO.js');
         }
 
-        // Toggle between app.js and appNEO.js on checkbox change
         document.getElementById('toggleScript').addEventListener('change', function (event) {
             if (event.target.checked) {
                 localStorage.setItem('selectedApp', 'app');
