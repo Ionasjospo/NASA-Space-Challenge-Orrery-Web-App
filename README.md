@@ -9,12 +9,12 @@ https://www.spaceappschallenge.org/nasa-space-apps-2024/challenges/create-an-orr
 - Ensure you have **Node.js** and **npm** installed.
 
 ### Installation
-   npm init -y
-   npm install babylonjs
-   npm install lite-server --save-dev
+  - npm init -y
+  - npm install babylonjs-
+  - npm install lite-server --save-dev
    
 ### Running the app
-  npx live-server
+ - npx live-server
 
 
 A TENER EN CUENTA PARA LA DOCUMENTACIÓN Y DEMÁS:
