@@ -5,7 +5,7 @@ let canvas, engine, scene, camera, celestialObjects = [];
 // Función para cargar el JSON
 async function loadData() {
     try {
-        const response = await fetch('../public/data/b67r-rgxc.json');  // Ruta al archivo JSON
+        const response = await fetch('./data/b67r-rgxc.json');  // Ruta al archivo JSON
         const data = await response.json();
         processData(data);
     } catch (error) {
