@@ -1,4 +1,3 @@
-// OrreryApp.js
 import * as THREE from './three.module.js';
 import { OrbitControls } from './orbitcontrols.js';
 
