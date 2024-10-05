@@ -71,7 +71,7 @@ function createOrbits(data) {
         const diameter = parseFloat(obj.diameter); // Diámetro del objeto
 
         // Aumentar el radio de la órbita en función del tamaño del objeto
-        const orbitRadius = a * 100; // Escalar el radio para las órbitas y añadir un margen
+        const orbitRadius = (a * 100) + (index * 50); // Escalar el radio para las órbitas y añadir un margen
         const orbitLine = createOrbit(orbitRadius, index);
         scene.addMesh(orbitLine);
     });
@@ -99,6 +99,8 @@ function init() {
     canvas = document.getElementById("renderCanvas");
     engine = new BABYLON.Engine(canvas, true);
     scene = new BABYLON.Scene(engine);
+
+    scene.clearColor = new BABYLON.Color4(0.01, 0.01, 0.12, 1);
 
     // Crear la cámara
     camera = new BABYLON.ArcRotateCamera(
