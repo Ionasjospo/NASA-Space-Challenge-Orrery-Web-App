@@ -30,7 +30,7 @@ function processData(data) {
         sphere.material = material;
 
         // Posición inicial del objeto (en el perihelio)
-        const perihelionDistance = q_au_1 * 100;  // Escalar la distancia para hacer visible el objeto
+        const perihelionDistance = q_au_1 * 1000;  // Escalar la distancia para hacer visible el objeto
         sphere.position.set(perihelionDistance, yOffset, 0); // Ajustar altura con yOffset
 
         // Guardar el objeto en un array para animarlo más tarde
@@ -38,7 +38,7 @@ function processData(data) {
         scene.addMesh(sphere);
 
         // Crear y añadir el label con el nombre del objeto
-        const label = createLabel(obj.object_name, perihelionDistance, yOffset + 10, 0); // Ajusta la posición Y del label
+        const label = createLabel("", perihelionDistance, yOffset + 10, 0); // Ajusta la posición Y del label
         scene.addMesh(label);
 
         console.log(`Objeto ${i}:`, celestialObjects[i]);  // Depuración
@@ -58,7 +58,7 @@ function createLabel(text, x, y, z) {
     const textBlock = new BABYLON.GUI.TextBlock();
     textBlock.text = text;
     textBlock.color = "white";
-    textBlock.fontSize = 24;
+    textBlock.fontSize = 54;
     advancedTexture.addControl(textBlock);
 
     return plane;
@@ -97,7 +97,8 @@ function init() {
     canvas = document.getElementById("renderCanvas");
     engine = new BABYLON.Engine(canvas, true);
     scene = new BABYLON.Scene(engine);
-
+    scene.clearColor = new BABYLON.Color4(0.01, 0.01, 0.12, 1);
+    
     camera = new BABYLON.ArcRotateCamera(
         "camera",
         BABYLON.Tools.ToRadians(45),

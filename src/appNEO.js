@@ -86,6 +86,7 @@ function init() {
     canvas = document.getElementById("renderCanvas");
     engine = new BABYLON.Engine(canvas, true);
     scene = new BABYLON.Scene(engine);
+    scene.clearColor = new BABYLON.Color4(0.01, 0.01, 0.12, 1);
 
     camera = new BABYLON.ArcRotateCamera(
         "camera",
