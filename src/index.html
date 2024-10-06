@@ -25,7 +25,7 @@
         const selectedApp = localStorage.getItem('selectedApp') || 'appNEO';
 
         const viewText = document.getElementById('viewText');
-        viewText.textContent = selectedApp === 'app' ? 'Current View: Comets' : 'Current View: NEO';
+        viewText.textContent = selectedApp === 'appComets' ? 'Current View: Comets' : 'Current View: NEO';
 
         function loadScript(scriptUrl) {
             const scriptTag = document.createElement('script');
@@ -33,8 +33,8 @@
             document.body.appendChild(scriptTag);
         }
 
-        if (selectedApp === 'app') {
-            loadScript('./app.js');
+        if (selectedApp === 'appComets') {
+            loadScript('./appComets.js');
             document.getElementById('toggleScript').checked = true;
         } else {
             loadScript('./appNEO.js');
@@ -42,7 +42,7 @@
 
         document.getElementById('toggleScript').addEventListener('change', function (event) {
             if (event.target.checked) {
-                localStorage.setItem('selectedApp', 'app');
+                localStorage.setItem('selectedApp', 'appComets');
                 location.reload();  
             } else {
                 localStorage.setItem('selectedApp', 'appNEO');
