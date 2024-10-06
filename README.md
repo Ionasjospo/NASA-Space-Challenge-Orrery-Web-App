@@ -17,12 +17,3 @@ https://www.spaceappschallenge.org/nasa-space-apps-2024/challenges/create-an-orr
 Move to src directory and execute
  - npx live-server
 
-
-# NASA-Space-Challenge-Orrery-VR-DEMO
-
-In the directory Orrery-VR-DEMO we have the unity program for simulate the VR demo. 
-To run the program, ensure you have Unity version 2022.3.49f1 installed:
-
--Open the project using the Unity Hub application.
--Run the project.
-
