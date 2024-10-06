@@ -18,11 +18,11 @@ Move to src directory and execute
  - npx live-server
 
 
-A TENER EN CUENTA PARA LA DOCUMENTACIÓN Y DEMÁS:
+# NASA-Space-Challenge-Orrery-VR-DEMO
 
-- El app data por el momento no tiene uso, habría que modificar el script del index.html para modificarlo y usarlo
+In the directory Orrery-VR-DEMO we have the unity program for simulate the VR demo. 
+To run the program, ensure you have Unity version 2022.3.49f1 installed:
 
-- https://www.youtube.com/watch?v=Y4PvekQUIqk este crack hizo andar el orbit control, explicar en la documentacion lo que explica el señor. El orbitcontrol.js y three.module.js había que descargar los archivos porque si los importabas desde github no andaba.
-
-
+-Open the project using the Unity Hub application.
+-Run the project.
 
